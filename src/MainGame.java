@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -71,10 +72,14 @@ public class MainGame extends Canvas implements Runnable {
 	
 	public void update(){
 		key.update();
-		paddleMove();
-		ballMove();
-		ballCollision();
-		paddleCollision();
+		player1.setWin();
+		player2.setWin();
+		if(!player1.getWin() && !player2.getWin()){
+			paddleMove();
+			ballMove();
+			ballCollision();
+			paddleCollision();
+		}
 	}
 
 	private void hit(Graphics g) {
@@ -118,16 +123,43 @@ public class MainGame extends Canvas implements Runnable {
 			createBufferStrategy(3);
 			return;
 		}
+		Random rand = new Random();
+		float r = rand.nextFloat();
+		float g2 = rand.nextFloat();
+		float b = rand.nextFloat();
+		Color randomColor = new Color(r, g2, b);
 		Graphics g = bs.getDrawGraphics();
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		player1.paint(g);
-		player2.paint(g);
-		ball.paint(g);
-		showScore(g);
+		if(!player1.getWin() && !player2.getWin()){
+			player1.paint(g);
+			player2.paint(g);
+			ball.paint(g);
+			showScore(g);
+			hit(g);
+		}
+		else if(player1.getWin()){
+			g.setFont(new Font("DS-Digital", Font.PLAIN, 120));
+			g.setColor(randomColor);
+			g.drawString("PLAYER 1 WINS", 200, 300);
+		}
+		else if(player2.getWin()){
+			g.setFont(new Font("DS-Digital", Font.PLAIN, 120));
+			g.setColor(randomColor);
+			g.drawString("PLAYER 2 WINS", 200, 300);
+		}
+		
+		if(player1.getWin() || player2.getWin()){
+			if(key.startGame){
+				player1.setScore(0);
+				player2.setScore(0);
+				player1.setWin();
+				player2.setWin();
+			}
+		}
 		g.dispose();
 		bs.show();
-		hit(g);
+		
 	}
 	
 	private void paddleMove() {
@@ -150,7 +182,7 @@ public class MainGame extends Canvas implements Runnable {
 	
 	private void ballMove() {
 		
-		if(key.enter)
+		if(key.startBall)
 			ball.setMove(true);
 		if(ball.getMove()){
 			ball.setX(ball.getX() + ball.getvx());

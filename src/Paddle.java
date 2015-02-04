@@ -10,6 +10,7 @@ public class Paddle {
 	int y;
 	int speed = 10;
 	int score = 0;
+	private boolean win = false;
 	
 	public Paddle(int w, int h, int x, int y){
 		width = w;
@@ -54,6 +55,18 @@ public class Paddle {
 	
 	public int getScore(){
 		return score;
+	}
+	
+	public void setWin(){
+		if(getScore() == 7){
+			win=true;
+		}
+		else
+			win = false;
+	}
+	
+	public boolean getWin(){
+		return win;
 	}
 	
 	public void paint(Graphics g){

@@ -5,13 +5,13 @@ import java.util.Random;
 
 public class Ball {
 
-	int width;
-	int height;
-	int x;
-	int y;
-	int vx;
-	int vy;
-	boolean move = false;
+	private int width;
+	private int height;
+	private int x;
+	private int y;
+	private int vx;
+	private int vy;
+	private boolean move = false;
 	
 	public Ball(int w, int h, int s, int x, int y){
 		width = w;
